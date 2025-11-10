@@ -56,6 +56,17 @@ db.Course.belongsToMany(db.User, {
   as: "EnrolledStudents",
 });
 
+// --- Course/CourseContent Relationship (One-to-Many) ---
+// One Course has many CourseContent items
+db.Course.hasMany(db.CourseContent, {
+  foreignKey: "courseId",
+  as: "ContentItems",
+  onDelete: "CASCADE",
+});
+db.CourseContent.belongsTo(db.Course, {
+  foreignKey: "courseId",
+  as: "Course",
+});
 // --- Direct Enrollment Links ---
 // Enrollment belongs directly to one User and one Course
 db.Enrollment.belongsTo(db.User, { foreignKey: "userId" });

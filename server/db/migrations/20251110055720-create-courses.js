@@ -20,7 +20,6 @@ const up = async (queryInterface, DataTypes) => {
       allowNull: false,
       defaultValue: 0.0,
     },
-    status: { type: DataTypes.ENUM("Published", "Draft"), allowNull: false },
 
     // Soft Delete Fields
     isDeleted: {
