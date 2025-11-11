@@ -1,2 +1,5 @@
 /server/node_modules
 /.env
+
+#pawan's files
+/server/db/seeders/20251110174403-seed-initial-courses.js
