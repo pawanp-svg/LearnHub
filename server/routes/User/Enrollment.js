@@ -1,10 +1,10 @@
 // routes/courseRoutes.js (ESM Syntax)
 import express from "express";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { authMiddleware } from "../../middlewares/authMiddleware.js";
 import {
   getCourseDashboard,
   enrollInCourse,
-} from "../controllers/courseController.js";
+} from "../../controllers/User/enrollmentController.js";
 
 const router = express.Router();
 
