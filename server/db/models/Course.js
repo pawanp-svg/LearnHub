@@ -27,11 +27,6 @@ export default (sequelize) => {
         type: DataTypes.DECIMAL(10, 2),
         defaultValue: 0.0,
       },
-      status: {
-        type: DataTypes.ENUM("Published", "Draft"),
-        allowNull: false,
-        defaultValue: "Draft",
-      },
       // Soft Delete Fields
       isDeleted: {
         type: DataTypes.BOOLEAN,
