@@ -1,5 +1,5 @@
-import { Enrollment, User, Course } from "../../db/models/index.js";
-
+import db from "../../db/models/index.js";
+const { Enrollment, User, Course } = db;
 
 export const viewEnrollments = async (req, res) => {
   try {

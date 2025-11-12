@@ -25,6 +25,7 @@ export const authMiddleware = (req, res, next) => {
     // 4. Attach the decoded user payload to the request object
     // The payload contains { userId: user.id, role: user.role }
     req.user = decoded;
+    console.log("Decoded JWT payload:", decoded);
 
     // 5. Proceed to the next middleware or route handler
     next();
