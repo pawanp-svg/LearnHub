@@ -1,11 +1,6 @@
-// controllers/enrollmentController.js (ESM Syntax)
-import db from "../../db/models/index.js"; // Import your configured models
+import db from "../../db/models/index.js";
 const { Course, Enrollment, Sequelize } = db;
 
-/**
- * 1. GET Course Dashboard: Lists all available courses and indicates the current user's enrollment status.
- * GET /api/courses/dashboard
- */
 export const getCourseDashboard = async (req, res) => {
   // The user ID is attached by authMiddleware
   const studentId = req.user.userId;
@@ -48,10 +43,6 @@ export const getCourseDashboard = async (req, res) => {
   }
 };
 
-/**
- * 2. POST Enroll in Course: Creates a new record in the Enrollments table.
- * POST /api/courses/:courseId/enroll
- */
 export const enrollInCourse = async (req, res) => {
   const studentId = req.user.userId;
   const courseId = req.params.courseId;

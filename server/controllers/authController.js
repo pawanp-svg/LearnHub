@@ -8,7 +8,7 @@ const User = db.User;
 
 // --- Configuration ---
 // NOTE: Use environment variables for the secret key!
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key_for_development";
+const JWT_SECRET = process.env.JWT_SECRET;
 const SALT_ROUNDS = 10;
 
 /**
@@ -58,9 +58,6 @@ export const register = async (req, res) => {
   }
 };
 
-/**
- * 3.2.1. Login: Authenticates user and issues a token
- */
 export const login = async (req, res) => {
   const { email, password } = req.body;
 

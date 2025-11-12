@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 
 // NOTE: Use the same secret key used in your authController.js
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key_for_development";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authMiddleware = (req, res, next) => {
   // 1. Check for the token in the Authorization header
