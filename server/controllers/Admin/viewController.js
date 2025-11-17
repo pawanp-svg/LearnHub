@@ -8,8 +8,8 @@ export const viewEnrollments = async (req, res) => {
     const enrollments = await Enrollment.findAll({
       where: { courseId },
       include: [
-        { model: User, as: "user", attributes: ["id", "first_name", "last_name", "email"] },
-        { model: Course, as: "course", attributes: ["id", "course_name"] },
+        { model: User, attributes: ["id", "first_name", "last_name", "email"] },
+        { model: Course, attributes: ["id", "course_name"] },
       ],
     });
 

@@ -32,7 +32,7 @@ export const createContent = async (req, res) => {
 // Optimized existing functions
 export const createCourse = async (req, res) => {
   try {
-    const { course_name, description, price } = req.body;
+    const { course_name, description, price, thumbnail_url  } = req.body;
     const adminId = req.user.userId;
 
     const existingCourse = await Course.findOne({ where: { course_name } });
@@ -47,6 +47,7 @@ export const createCourse = async (req, res) => {
       course_name,
       description,
       price,
+      thumbnail_url,
     });
     res.status(201).json({ message: "Course created successfully", newCourse });
   } catch (error) {
@@ -108,5 +109,24 @@ export const deleteCourse = async (req, res) => {
   } catch (error) {
     console.error("Error deleting course:", error);
     res.status(500).json({ message: "Failed to delete course" });
+  }
+};
+
+export const courseStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const course = await Course.findByPk(id);
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Update course status instead of soft delete
+    await course.update({ status: "Published", updatedAt: new Date() });
+
+    res.status(200).json({ message: "Course status updated to published" });
+  } catch (error) {
+    console.error("Error updating course status:", error);
+    res.status(500).json({ message: "Failed to update course status" });
   }
 };

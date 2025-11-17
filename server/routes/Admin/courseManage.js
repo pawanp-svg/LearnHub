@@ -6,6 +6,7 @@ import {
   getCourseById,
   updateCourse,
   deleteCourse,
+  courseStatus,
 } from "../../controllers/Admin/manageController.js";
 import { authMiddleware,isAdmin } from "../../middlewares/authMiddleware.js";
 
@@ -23,5 +24,7 @@ router.delete("/:id",authMiddleware, isAdmin,deleteCourse);
 router.get("/", authMiddleware,getCourses);
 
 router.get("/:id", authMiddleware,getCourseById);
+
+router.put("/status/:id", authMiddleware,isAdmin,courseStatus);
 
 export default router;
