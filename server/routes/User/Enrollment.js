@@ -5,6 +5,7 @@ import {
   getCourseDashboard,
   enrollInCourse,
 } from "../../controllers/User/enrollmentController.js";
+import { getAllCourses } from "../../controllers/User/courseController.js";
 
 const router = express.Router();
 
@@ -15,5 +16,7 @@ router.get("/dashboard", authMiddleware, getCourseDashboard);
 // 3.2.3. Course Enrollment (POST)
 // Endpoint: /api/courses/:courseId/enroll
 router.post("/:courseId/enroll", authMiddleware, enrollInCourse);
+
+router.get("/", getAllCourses);
 
 export default router;

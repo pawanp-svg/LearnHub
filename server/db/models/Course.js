@@ -32,6 +32,10 @@ export default (sequelize) => {
         allowNull: false,
         defaultValue: "Draft",
       },
+      thumbnailUrl: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       // Soft Delete Fields
       isDeleted: {
         type: DataTypes.BOOLEAN,

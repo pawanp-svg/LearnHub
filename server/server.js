@@ -4,12 +4,14 @@ import authRoutes from "./routes/Auth.js";
 import userRoutes from "./routes/User/Enrollment.js";
 import adminCourseRoutes from "./routes/Admin/courseManage.js";
 import adminEnrollmentRoutes from "./routes/Admin/enrollmentView.js";
+import cors from "cors";
 dotenv.config({ path: "../.env" });
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 //middlewares
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
