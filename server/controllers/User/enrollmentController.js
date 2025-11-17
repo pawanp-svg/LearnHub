@@ -80,6 +80,11 @@ export const enrollInCourse = async (req, res) => {
       enrollment_date: new Date(),
     });
 
+    await Course.increment("totalEnrollments", {
+      by: 1,
+      where: { id: courseId },
+    });
+
     return res.status(201).json({
       message: "Successfully enrolled in the course!",
       enrollmentId: newEnrollment.id,
