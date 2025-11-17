@@ -36,6 +36,11 @@ export default (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      totalEnrollments: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
       // Soft Delete Fields
       isDeleted: {
         type: DataTypes.BOOLEAN,
