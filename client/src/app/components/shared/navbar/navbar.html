@@ -26,11 +26,15 @@
     <!-- AFTER LOGIN -->
     @if (isLoggedIn) {
 
-    <button mat-fab extended class="nav-button courses-button" routerLink="/my-courses">
+    <button mat-fab extended class="nav-button courses-button" routerLink="/my-courses" *ngIf="userRole === 'Student'">
       My Courses
     </button>
 
-    <button mat-fab class="profile-button">
+    <button mat-fab extended class="nav-button courses-button" *ngIf="userRole === 'Admin'">
+      Create Course
+    </button>
+
+    <button mat-fab class="profile-button cart-button" routerLink="/cart" *ngIf="userRole === 'Student'">
       <mat-icon>shopping_cart</mat-icon>
     </button>
 
@@ -39,10 +43,11 @@
     </button>
 
     <mat-menu #profileMenu="matMenu">
-      <button mat-menu-item routerLink="/profile">
+      <button mat-menu-item routerLink="/profile" *ngIf="userRole === 'Student'">
         <mat-icon>edit</mat-icon>
         <span>Edit Profile</span>
       </button>
+    
 
       <button mat-menu-item (click)="onLogout()">
         <mat-icon>logout</mat-icon>

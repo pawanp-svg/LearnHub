@@ -35,6 +35,10 @@ export class AuthService {
     return user ? JSON.parse(user) : null;
   }
 
+    userRole(): string | null {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user)?.role : null;
+  }
   // ---- Register ---------------------------------------------------
 
   register(data: { email: string; password: string; first_name: string; last_name: string }) {

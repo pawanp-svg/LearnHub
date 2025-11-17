@@ -35,6 +35,10 @@ export class Navbar {
     return this.auth.isLoggedIn();
   }
 
+  get userRole() {
+    return this.auth.userRole();
+  }
+
   onLogout() {
     this.auth.logout();
     this.router.navigate(['/']);

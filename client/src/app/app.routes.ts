@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomePage } from './pages/home-page/home-page';
 import { AuthPage } from './pages/User/auth-page/auth-page';
 import { AuthGuard } from './guards/Auth/auth-guard';
+import { CourseDetailPage } from './pages/User/course-detail-page/course-detail-page';
 // import your course detail page later
 
 export const appRoutes: Routes = [
@@ -21,5 +22,10 @@ export const appRoutes: Routes = [
   {
     path: 'auth',
     component: AuthPage,
+  },
+  {
+    path: 'course',
+    component: CourseDetailPage,
+    canActivate: [AuthGuard],
   },
 ];
