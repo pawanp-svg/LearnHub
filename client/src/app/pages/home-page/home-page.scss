@@ -1,0 +1,45 @@
+.content-wrapper {
+  min-height: calc(100vh - 64px - 60px);
+  background-color: #ffffff;
+}
+.course-list-section {
+  padding: 40px 80px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.section-header {
+  color: #003459;
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+}
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+.no-courses-message {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f4f8fa;
+  border-radius: 8px;
+  margin-top: 40px;
+}
+.no-courses-message .icon {
+  font-size: 60px;
+  width: 60px;
+  height: 60px;
+  color: #005980;
+  margin-bottom: 15px;
+}
+.cta-button {
+  background-color: #005980;
+  color: #ffffff;
+  margin-top: 15px;
+}
+@media (max-width: 768px) {
+  .course-list-section {
+    padding: 20px 20px;
+  }
+}

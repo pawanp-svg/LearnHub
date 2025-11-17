@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+
+<main class="content-wrapper">
+  <!-- Show hero only when logged out AND on homepage -->
+  @if (!isLoggedIn() && pageType === 'home') {
+  <app-background-section></app-background-section>
+  }
+
+  <!-- Course Display Section -->
+  <section class="course-list-section">
+    <h2 class="section-header">
+      {{ pageType === 'my-courses' ? 'Your Courses' : 'Popular Courses to Start Learning' }}
+    </h2>
+
+    <div class="course-grid">
+      @for (course of filteredCourses(); track course.id) {
+      <app-course-card [course]="course"></app-course-card>
+      }
+    </div>
+
+    @if (pageType === 'my-courses' && filteredCourses().length === 0) {
+    <div class="no-courses-message">
+      <mat-icon class="icon">school</mat-icon>
+      <h3>You are not enrolled in any courses yet.</h3>
+      <p>Explore the full catalog to begin your learning journey.</p>
+      <button mat-flat-button class="cta-button" routerLink="/">Browse All Courses</button>
+    </div>
+    }
+  </section>
+</main>
+
+<app-footer></app-footer>

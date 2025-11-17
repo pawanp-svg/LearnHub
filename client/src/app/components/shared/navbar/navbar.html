@@ -1,0 +1,55 @@
+<mat-toolbar class="learnhub-navbar">
+  <div class="logo-group">
+    <span class="logo-text" routerLink="/" style="cursor: pointer"> LearnHub </span>
+  </div>
+
+  <!-- Show search bar only when logged in -->
+  @if (isLoggedIn) {
+  <div class="logged-in-search">
+    <div class="search-container">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text" placeholder="Search courses..." class="search-input" />
+    </div>
+  </div>
+  }
+
+  <div class="spacer"></div>
+
+  <div class="action-buttons">
+    <!-- BEFORE LOGIN -->
+    @if (!isLoggedIn) {
+    <button mat-fab extended class="nav-button login-button" routerLink="/auth">Log In</button>
+
+    <button mat-fab extended class="nav-button signup-button" routerLink="/auth">Sign Up</button>
+    }
+
+    <!-- AFTER LOGIN -->
+    @if (isLoggedIn) {
+
+    <button mat-fab extended class="nav-button courses-button" routerLink="/my-courses">
+      My Courses
+    </button>
+
+    <button mat-fab class="profile-button">
+      <mat-icon>shopping_cart</mat-icon>
+    </button>
+
+    <button mat-fab [matMenuTriggerFor]="profileMenu" class="profile-button">
+      <mat-icon>person</mat-icon>
+    </button>
+
+    <mat-menu #profileMenu="matMenu">
+      <button mat-menu-item routerLink="/profile">
+        <mat-icon>edit</mat-icon>
+        <span>Edit Profile</span>
+      </button>
+
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        <span>Log Out</span>
+      </button>
+    </mat-menu>
+
+    }
+  </div>
+</mat-toolbar>

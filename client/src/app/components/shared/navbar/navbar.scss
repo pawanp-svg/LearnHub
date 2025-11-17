@@ -1,0 +1,134 @@
+/* --- Base Layout & Colors --- */
+.learnhub-navbar {
+  background-color: #ffffff;
+  height: 64px;
+  padding: 0 40px;
+  border-bottom: 1px solid #efefef;
+  box-shadow: 0 1px 6px rgba(0, 52, 89, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.logo-text {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #003459; /* Primary Dark Logo */
+}
+.spacer {
+  flex: 1 1 auto;
+}
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- Button Styling (FAB Overrides) --- */
+.nav-button {
+  font-weight: 600;
+  transition: all 0.2s;
+  height: 40px;
+  padding: 0 16px;
+  min-width: auto;
+}
+
+/* Login Button (Extended FAB - Outline/Ghost) */
+.login-button,
+.courses-button {
+  background-color: transparent !important;
+  border: 1px solid #005980; /* Primary Light Border */
+  color: #003459; /* Dark text */
+  font-weight: 500;
+}
+.login-button:hover,
+.courses-button:hover {
+  background-color: #efefef !important;
+}
+.courses-button {
+  height: 40px;
+}
+
+/* Signup Button (Primary CTA - Extended FAB) */
+.signup-button {
+  background-color: #007ea7; /* Accent */
+  color: #ffffff;
+  border: none;
+  font-weight: 500;
+}
+.signup-button:hover {
+  background-color: #005980; /* Primary Light on hover */
+}
+
+/* Profile Button (Regular FAB) */
+.profile-button {
+  color: #ffffff;
+  background-color: #005980; /* Primary Light BG */
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  margin-left: 10px;
+}
+.profile-button:hover {
+  background-color: #003459;
+}
+
+/* --- Search Bar Styling (FIXED ALIGNMENT and Aesthetic) --- */
+.logged-in-search {
+  flex-grow: 1;
+  max-width: 500px;
+  margin: 0 40px;
+  display: flex;
+  align-items: center;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 30px;
+  padding: 6px 14px;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.search-container:hover,
+.search-container:focus-within {
+  border-color: #007ea7;
+  box-shadow: 0 0 5px rgba(0, 126, 167, 0.3);
+}
+
+.search-icon {
+  color: #007ea7;
+  font-size: 20px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  top: 1px; /* fine-tune vertical alignment */
+}
+
+.search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 15px;
+  padding: 4px 0;
+  line-height: 1.2;
+}
+
+@media (max-width: 900px) {
+  .logged-in-search {
+    display: none;
+  }
+}

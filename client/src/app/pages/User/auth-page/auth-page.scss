@@ -1,0 +1,156 @@
+/* Color Scheme: 003459 (Dark), 005980 (Light), 007EA7 (Accent), 00171F (BG), FFFFFF (White) */
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #ffffff; /* Background */
+  font-family: Arial, sans-serif;
+}
+
+.auth-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns for desktop */
+  width: 100%;
+  max-width: 1100px;
+  min-height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 52, 89, 0.4); /* Shadow from Primary Dark */
+  background-color: #ffffff;
+}
+
+/* --- Left Panel (Inspiration Illustration) --- */
+.illustration-panel {
+  background-color: #003459; /* Primary Dark */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  color: #ffffff;
+}
+.illustration-content {
+  text-align: center;
+  max-width: 80%;
+}
+.large-icon {
+  font-size: 80px;
+  width: 80px;
+  height: 80px;
+  color: #007ea7; /* Accent */
+  margin-bottom: 20px;
+}
+.panel-title {
+  font-size: 2.2em;
+  margin-bottom: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.panel-text {
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* --- Right Panel (Form) --- */
+.form-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+.form-content {
+  width: 100%;
+  max-width: 380px;
+}
+.form-header {
+  font-size: 1.8em;
+  color: #003459; /* Primary Dark */
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.full-width {
+  width: 100%;
+}
+.name-group {
+  display: flex;
+  gap: 16px;
+}
+.half-width {
+  flex: 1;
+}
+
+/* --- Buttons --- */
+.submit-button {
+  height: 48px;
+  font-size: 1em;
+  font-weight: 600;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+
+/* Primary Button (Login - 005980) */
+.mat-raised-button.mat-primary {
+  background-color: #005980;
+  color: #ffffff;
+}
+.mat-raised-button.mat-primary:hover {
+  background-color: #007ea7; /* Highlight */
+}
+
+/* Accent Button (Register - 007EA7) */
+.mat-raised-button.mat-accent {
+  background-color: #007ea7;
+  color: #ffffff;
+}
+.mat-raised-button.mat-accent:hover {
+  background-color: #005980; /* Highlight */
+}
+
+/* --- Footer Toggle --- */
+.card-footer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+}
+.toggle-text {
+  margin: 0;
+  color: #00171f;
+  font-size: 0.9em;
+}
+.toggle-button {
+  color: #007ea7; /* Accent link color */
+  font-weight: 600;
+}
+
+/* --- Responsive Adjustments (Mobile/Tablet) --- */
+@media (max-width: 992px) {
+  .auth-layout {
+    grid-template-columns: 1fr; /* Single column layout on small screens */
+    min-height: auto;
+    max-width: 500px;
+  }
+  .illustration-panel {
+    display: none; /* Hide illustration on mobile to save space */
+  }
+  .form-panel {
+    padding: 30px;
+  }
+  .form-content {
+    max-width: 100%;
+  }
+}
