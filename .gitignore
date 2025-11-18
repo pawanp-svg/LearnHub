@@ -1,7 +1,7 @@
 /server/node_modules
 /.env
 /client/node_modules
-/.angular
+/client/.angular
 #pawan's files
 /server/db/seeders/20251110174403-seed-initial-courses.js
 

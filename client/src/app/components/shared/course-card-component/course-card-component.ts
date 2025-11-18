@@ -11,24 +11,24 @@ import { MatMenuModule } from '@angular/material/menu';
 @Component({
   selector: 'app-course-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule,MatMenuModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatMenuModule],
   template: `
     <mat-card class="course-card">
-       @if (course.isEnrolled && userRole === 'Student') {
-    <div class="enrolled-badge" title="Enrolled">
-      <mat-icon>check_circle</mat-icon>
-    </div>
-  } @else {
-    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
-      <mat-icon>more_vert</mat-icon>
-    </button>
+      @if (course.isEnrolled && userRole === 'Student') {
+      <div class="enrolled-badge" title="Enrolled">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      } @else {
+      <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
+        <mat-icon>more_vert</mat-icon>
+      </button>
 
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item>Publish</button>
-      <button mat-menu-item>Edit</button>
-      <button mat-menu-item>Delete</button>
-    </mat-menu>
-  }
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Publish</button>
+        <button mat-menu-item>Edit</button>
+        <button mat-menu-item>Delete</button>
+      </mat-menu>
+      }
 
       <div class="card-image-container">
         <mat-icon class="image-icon">school</mat-icon>
@@ -41,23 +41,19 @@ import { MatMenuModule } from '@angular/material/menu';
 
         <div class="card-footer">
           <span class="course-price">{{ course.price | currency : 'USD' }}</span>
-          <button
-    mat-flat-button
-    class="details-button"
-    *ngIf="userRole === 'Admin'"
-  >
-    Enrollments
-  </button>
+          <button mat-flat-button class="details-button" *ngIf="userRole === 'Admin'">
+            Enrollments
+          </button>
 
-  <!-- Button for Student -->
-  <button
-    mat-flat-button
-    class="details-button"
-    *ngIf="userRole === 'Student'"
-    (click)="learningHandler()"
-  >
-    Start Learning
-  </button>
+          <!-- Button for Student -->
+          <button
+            mat-flat-button
+            class="details-button"
+            *ngIf="userRole === 'Student'"
+            (click)="learningHandler()"
+          >
+            Start Learning
+          </button>
         </div>
       </div>
     </mat-card>
@@ -78,7 +74,7 @@ import { MatMenuModule } from '@angular/material/menu';
       .menu-btn {
         position: absolute;
         top: 10px;
-        right: 10px;   
+        right: 10px;
         z-index: 10;
       }
       .course-card:hover {
@@ -175,11 +171,11 @@ export class CourseCardComponent {
   @Input({ required: true }) course!: Course;
   constructor(private auth: AuthService, private router: Router) {}
 
-get userRole(){
-  return this.auth.userRole();
-}
+  get userRole() {
+    return this.auth.userRole();
+  }
 
   learningHandler() {
-    this
+    this;
   }
 }
