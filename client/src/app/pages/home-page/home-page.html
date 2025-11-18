@@ -1,24 +1,40 @@
 <app-navbar></app-navbar>
 
 <main class="content-wrapper">
-  <!-- Show hero only when logged out AND on homepage -->
+  <!-- ========================= -->
+  <!-- HERO SECTION (only logged out + homepage) -->
+  <!-- ========================= -->
   @if (!isLoggedIn() && pageType === 'home') {
   <app-background-section></app-background-section>
   }
 
-  <!-- Course Display Section -->
+  <!-- ========================= -->
+  <!-- COURSE DISPLAY SECTION -->
+  <!-- ========================= -->
   <section class="course-list-section">
     <h2 class="section-header">
       {{ pageType === 'my-courses' ? 'Your Courses' : 'Popular Courses to Start Learning' }}
     </h2>
 
+    <!-- LOADING STATE -->
+    @if (loading()) {
+    <div class="loading-container">
+      <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+      <p>Loading courses...</p>
+    </div>
+    }
+
+    <!-- COURSE GRID -->
+    @if (!loading()) {
     <div class="course-grid">
       @for (course of filteredCourses(); track course.id) {
-      <app-course-card [course]="course"></app-course-card>
+      <app-course-card [course]="$any(course)"></app-course-card>
       }
     </div>
+    }
 
-    @if (pageType === 'my-courses' && filteredCourses().length === 0) {
+    <!-- EMPTY STATE FOR MY COURSES -->
+    @if (!loading() && pageType === 'my-courses' && filteredCourses().length === 0) {
     <div class="no-courses-message">
       <mat-icon class="icon">school</mat-icon>
       <h3>You are not enrolled in any courses yet.</h3>

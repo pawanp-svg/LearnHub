@@ -10,6 +10,7 @@ export const getCourseDashboard = async (req, res) => {
     const courses = await Course.findAll({
       where: {
         isDeleted: false,
+        status: "Published",
       },
       attributes: [
         "id",

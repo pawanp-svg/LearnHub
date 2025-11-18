@@ -1,14 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
 interface AuthResponse {
   message: string;
   token: string;
   user: {
     id: number;
     email: string;
-    role: string;
+    role: 'Student' | 'Admin';
   };
 }
 
@@ -30,15 +29,22 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  private loadUser(): any {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+  public loadUser(): any {
+    const raw = localStorage.getItem('user');
+    return raw ? JSON.parse(raw) : null;
   }
 
-    userRole(): string | null {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user)?.role : null;
+  getUserRole(): 'Student' | 'Admin' | null {
+    const raw = localStorage.getItem('user');
+    if (!raw) return null;
+
+    try {
+      return JSON.parse(raw).role || null;
+    } catch {
+      return null;
+    }
   }
+
   // ---- Register ---------------------------------------------------
 
   register(data: { email: string; password: string; first_name: string; last_name: string }) {
@@ -51,7 +57,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.API_URL}/login`, data);
   }
 
-  // ---- Handle Login Success ---------------------------------------
+  // ---- Handle Login Success --------------------------------------
 
   handleAuthSuccess(res: AuthResponse) {
     localStorage.setItem('token', res.token);
@@ -63,7 +69,7 @@ export class AuthService {
     this.router.navigate(['/']);
   }
 
-  // ---- Logout -----------------------------------------------------
+  // ---- Logout ----------------------------------------------------
 
   logout() {
     localStorage.removeItem('token');

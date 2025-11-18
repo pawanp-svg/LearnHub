@@ -36,7 +36,7 @@ export class Navbar {
   }
 
   get userRole() {
-    return this.auth.userRole();
+    return this.auth.getUserRole();
   }
 
   onLogout() {

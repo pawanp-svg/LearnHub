@@ -1,15 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseCardComponent } from '../../components/shared/course-card-component/course-card-component';
 import { FooterComponent } from '../../components/shared/footer-component/footer-component';
-import { SAMPLE_COURSES, Course } from '../../static/course-data';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Navbar } from '../../components/shared/navbar/navbar';
 import { BackgroundSectionComponent } from '../../components/User/background-section-component/background-section-component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
-import { signal, computed } from '@angular/core';
+import { CourseService, Course } from '../../services/course-service';
 
 @Component({
   selector: 'app-home-page',
@@ -22,42 +21,65 @@ import { signal, computed } from '@angular/core';
     FooterComponent,
     MatIconModule,
     MatButtonModule,
+    RouterLink,
   ],
   templateUrl: './home-page.html',
   styleUrls: ['./home-page.scss'],
 })
 export class HomePage {
-  // Route-based mode
   pageType: 'home' | 'my-courses' = 'home';
 
-  // Data
-  allCourses = SAMPLE_COURSES;
+  // Backend-driven data (signal)
+  get courses() {
+    return this.courseService.courses;
+  }
+
+  // Filtered list for template
   filteredCourses = signal<Course[]>([]);
 
-  constructor(private route: ActivatedRoute, public auth: AuthService) {
-    // react to route data
+  loading = signal(true);
+
+  constructor(
+    private route: ActivatedRoute,
+    public auth: AuthService,
+    private courseService: CourseService
+  ) {
+    // When route changes (home → my-courses)
     this.route.data.subscribe((data) => {
       this.pageType = data['pageType'] ?? 'home';
-      this.updateFilteredCourses();
+      this.applyFilter();
     });
   }
 
-  ngOnInit() {
-    this.updateFilteredCourses();
+  async ngOnInit() {
+    this.loading.set(true);
+
+    await this.courseService.loadCourses(); // auto-selects endpoint based on role
+    this.applyFilter();
+
+    this.loading.set(false);
   }
 
   // ------------------------------------------------
-  // FILTER COURSES
+  // FILTER COURSES BASED ON ROUTE MODE
   // ------------------------------------------------
-  private updateFilteredCourses(): void {
+  private applyFilter() {
+    const all = this.courses();
+
     if (this.pageType === 'my-courses') {
-      this.filteredCourses.set(this.allCourses.filter((c) => c.isEnrolled));
+      // Only Student role can have enrolled list
+      if (this.auth.getUserRole() === 'Student') {
+        this.filteredCourses.set(all.filter((c) => c.isEnrolled));
+      } else {
+        // Admin → empty list (no enrolled concept)
+        this.filteredCourses.set([]);
+      }
     } else {
-      this.filteredCourses.set(this.allCourses);
+      // Home → show all courses
+      this.filteredCourses.set(all);
     }
   }
 
-  // Quick reactive getter for template
   isLoggedIn() {
     return this.auth.isLoggedIn();
   }

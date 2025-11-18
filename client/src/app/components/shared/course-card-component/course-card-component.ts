@@ -3,22 +3,22 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Course } from '../../../static/course-data';
+import { Course } from '../../../services/course-service';
 import { AuthService } from '../../../services/auth';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-course-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, RouterLink],
   template: `
     <mat-card class="course-card">
       @if (course.isEnrolled && userRole === 'Student') {
       <div class="enrolled-badge" title="Enrolled">
         <mat-icon>check_circle</mat-icon>
       </div>
-      } @else {
+      } @if(userRole==='Admin') {
       <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
         <mat-icon>more_vert</mat-icon>
       </button>
@@ -35,8 +35,7 @@ import { MatMenuModule } from '@angular/material/menu';
       </div>
 
       <div class="card-content-area">
-        <h3 class="course-title">{{ course.name }}</h3>
-        <p class="course-instructor">{{ course.instructor }}</p>
+        <h3 class="course-title">{{ course.course_name }}</h3>
         <p class="course-description">{{ course.description }}</p>
 
         <div class="card-footer">
@@ -45,14 +44,29 @@ import { MatMenuModule } from '@angular/material/menu';
             Enrollments
           </button>
 
-          <!-- Button for Student -->
+          <!-- STUDENT: NOT LOGGED IN -->
+          <button mat-flat-button class="details-button" *ngIf="!isLoggedIn" routerLink="/auth">
+            Start Learning
+          </button>
+
+          <!-- STUDENT: LOGGED IN + NOT ENROLLED -->
           <button
             mat-flat-button
             class="details-button"
-            *ngIf="userRole === 'Student'"
-            (click)="learningHandler()"
+            *ngIf="isLoggedIn && userRole === 'Student' && !course.isEnrolled"
+            (click)="goToCourse()"
           >
             Start Learning
+          </button>
+
+          <!-- STUDENT: LOGGED IN + ENROLLED -->
+          <button
+            mat-flat-button
+            class="details-button enrolled-btn"
+            *ngIf="isLoggedIn && userRole === 'Student' && course.isEnrolled"
+            (click)="goToCourse()"
+          >
+            Continue Learning
           </button>
         </div>
       </div>
@@ -69,7 +83,7 @@ import { MatMenuModule } from '@angular/material/menu';
         padding: 0;
         position: relative;
         overflow: hidden;
-        min-height: 350px;
+        height: auto;
       }
       .menu-btn {
         position: absolute;
@@ -116,32 +130,42 @@ import { MatMenuModule } from '@angular/material/menu';
       /* Content Area */
       .card-content-area {
         padding: 0 16px 16px;
-        flex-grow: 1;
         display: flex;
         flex-direction: column;
+        flex: 1;
       }
       .course-title {
         font-size: 1.25rem;
         font-weight: 800;
-        color: #003459; /* Primary Dark */
+        color: #003459;
         line-height: 1.3;
         margin: 0 0 5px 0;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* 🔥 force the title to 1 line */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
       .course-instructor {
         font-size: 0.9rem;
-        color: #007ea7; /* Accent for Instructor Name */
+        color: #007ea7;
         margin-bottom: 10px;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 1; /* 🔥 1 line only */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
       .course-description {
         font-size: 0.95rem;
         color: #555;
         margin-bottom: 15px;
-        flex-grow: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        flex: 1;
+
         display: -webkit-box;
-        -webkit-line-clamp: 2; /* Limit to 2 lines */
+        -webkit-line-clamp: 2; /* 🔥 keep 2 lines */
         -webkit-box-orient: vertical;
+        overflow: hidden;
       }
       .card-footer {
         display: flex;
@@ -168,14 +192,27 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
 })
 export class CourseCardComponent {
+  isLoggedIn = false;
+  userRole: string | null = null;
   @Input({ required: true }) course!: Course;
   constructor(private auth: AuthService, private router: Router) {}
 
-  get userRole() {
-    return this.auth.userRole();
+  ngOnInit() {
+    this.isLoggedIn = this.auth.isLoggedIn();
+    this.userRole = this.auth.getUserRole();
   }
 
   learningHandler() {
     this;
+  }
+
+  goToCourse() {}
+
+  isStudent() {
+    return this.auth.loadUser() === 'Student';
+  }
+
+  isEnrolled() {
+    return !!this.course.isEnrolled;
   }
 }
