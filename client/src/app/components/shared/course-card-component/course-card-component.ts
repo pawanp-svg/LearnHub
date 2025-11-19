@@ -7,11 +7,17 @@ import { Course } from '../../../services/course-service';
 import { AuthService } from '../../../services/auth';
 import { Router, RouterLink } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
+import { CourseService } from '../../../services/course-service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
+import { DeleteConfirmDialogComponent } from '../../Admin/delete-confirm-dialog/delete-confirm-dialog';
+import { CreateCourseDialogComponent } from '../../Admin/create-course-dialog/create-course-dialog';
+
 
 @Component({
   selector: 'app-course-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, RouterLink],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, RouterLink,  MatListModule],
   template: `
     <mat-card class="course-card">
       @if (course.isEnrolled && userRole === 'Student') {
@@ -22,14 +28,20 @@ import { MatMenuModule } from '@angular/material/menu';
       <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-btn">
         <mat-icon>more_vert</mat-icon>
       </button>
-
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Publish</button>
-        <button mat-menu-item>Edit</button>
-        <button mat-menu-item>Delete</button>
+        <button mat-menu-item (click)="toggleStatus(course)">
+          {{ course.status === 'Draft' ? 'Publish' : 'Unpublish' }}
+        </button>
+
+        <button mat-menu-item (click)="openEditCourse()">
+          Edit
+        </button>
+
+        <button mat-menu-item (click)="deleteCourse(course.id)">
+          Delete
+        </button>
       </mat-menu>
       }
-
       <div class="card-image-container">
         <mat-icon class="image-icon">school</mat-icon>
       </div>
@@ -87,6 +99,7 @@ import { MatMenuModule } from '@angular/material/menu';
       }
       .menu-btn {
         position: absolute;
+        color:white;
         top: 10px;
         right: 10px;
         z-index: 10;
@@ -192,10 +205,12 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
 })
 export class CourseCardComponent {
+
+  menuOpen: boolean = false;
   isLoggedIn = false;
   userRole: string | null = null;
   @Input({ required: true }) course!: Course;
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router,private courseService: CourseService,private dialog: MatDialog) {}
 
   ngOnInit() {
     this.isLoggedIn = this.auth.isLoggedIn();
@@ -215,4 +230,43 @@ export class CourseCardComponent {
   isEnrolled() {
     return !!this.course.isEnrolled;
   }
+
+  toggleStatus(course: any) {
+  const newStatus = course.status === 'Draft' ? 'Published' : 'Draft';
+
+  this.courseService.updateStatus(course.id, newStatus).subscribe({
+    next: (res: any) => {
+      course.status = newStatus; // update UI immediately
+    },
+    error: (err) => console.error(err)
+  });
+  }
+
+  deleteCourse(id: number) {
+  const ref = this.dialog.open(DeleteConfirmDialogComponent, {
+    width: '350px'
+  });
+
+  ref.afterClosed().subscribe(result => {
+    if (!result) return; // user clicked cancel
+
+    this.courseService.deleteCourse(id).subscribe({
+      next: () => {
+        this.courseService.loadCourses(); // Refresh UI
+      },
+      error: err => console.error(err)
+    });
+  });
 }
+
+openEditCourse() {
+  this.dialog.open(CreateCourseDialogComponent, {
+    width: '700px',
+    data: { mode: 'edit' }
+  }).afterClosed().subscribe(res => {
+    if (res) this.courseService.loadCourses();
+  });
+}
+
+}
+

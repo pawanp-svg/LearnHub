@@ -80,4 +80,27 @@ export class CourseService {
   refresh() {
     return this.loadCourses();
   }
+
+  createCourse(courseData: any) {
+  return this.http.post(`${this.API}/admin/courses`, courseData);
+  }
+  createMultipleContents(payload: any) {
+  return this.http.post(`${this.API}/admin/courses/content`, payload);
+ }
+
+  updateStatus(id: number, status: string) {
+  return this.http.put(`${this.API}/admin/courses/status/${id}`, { status });
+  }
+
+  updateCourse(id: number, data: any) {
+  return this.http.put(`${this.API}/admin/courses/${id}`, data);
+  }
+
+  getCourseById(id: number) {
+  return this.http.get(`${this.API}/courses/${id}`);
+}
+
+  deleteCourse(id: number) {
+    return this.http.delete(`${this.API}/admin/courses/${id}`);
+  }
 }

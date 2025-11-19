@@ -30,7 +30,7 @@
       My Courses
     </button>
 
-    <button mat-fab extended class="nav-button courses-button" *ngIf="userRole === 'Admin'">
+    <button mat-fab extended class="nav-button courses-button" *ngIf="userRole === 'Admin'" (click)="openCreateCourse()">
       Create Course
     </button>
 

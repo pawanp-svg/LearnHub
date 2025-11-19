@@ -1,0 +1,77 @@
+<mat-dialog-content>
+
+  <!-- PARENT FORM GROUP -->
+  <form [formGroup]="courseForm" class="form">
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Course Name</mat-label>
+      <input matInput formControlName="course_name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" formControlName="price" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Thumbnail URL</mat-label>
+      <input matInput formControlName="thumbnail_url" />
+    </mat-form-field>
+
+    <hr />
+
+    <h3>Contents</h3>
+
+    <!-- FORM ARRAY STARTS -->
+    <div formArrayName="contents">
+
+      <div *ngFor="let c of contents.controls; let i = index" [formGroupName]="i" class="content-box">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Content</mat-label>
+          <textarea matInput formControlName="content"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Order Index</mat-label>
+          <input matInput type="number" formControlName="order_index" />
+        </mat-form-field>
+
+        <button mat-stroked-button color="warn" (click)="removeContent(i)" *ngIf="contents.length > 1">
+          Remove
+        </button>
+
+        <hr />
+      </div>
+
+    </div>
+
+    <button mat-raised-button color="accent" (click)="addContent()">
+      + Add Another Content
+    </button>
+
+    <br><br>
+
+    <!-- PUBLISH CHECKBOX AT END -->
+    <mat-checkbox formControlName="is_published">
+      Publish this course
+    </mat-checkbox>
+
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" (click)="submit()">Create</button>
+</mat-dialog-actions>

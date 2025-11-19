@@ -3,39 +3,58 @@ const { Course, CourseContent } = db;
 
 export const createContent = async (req, res) => {
   try {
-    const { courseId, title, content, order_index } = req.body;
+    const { courseId, contents } = req.body;
 
-    // Check if the course exists
+    // Validate request
+    if (!courseId || !Array.isArray(contents) || contents.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "courseId and contents[] are required" });
+    }
+
+    // Check if course exists
     const course = await Course.findByPk(courseId);
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // Create new course content
-    const newContent = await CourseContent.create({
+    // Attach courseId to each content item
+    const contentPayload = contents.map(item => ({
       courseId,
-      title,
-      content,
-      order_index,
+      title: item.title,
+      content: item.content,
+      order_index: item.order_index,
+    }));
+
+    // Bulk insert
+    const createdContents = await CourseContent.bulkCreate(contentPayload, {
+      returning: true,
     });
 
     res.status(201).json({
-      message: "Content created successfully",
-      newContent,
+      message: "Contents created successfully",
+      contents: createdContents,
     });
+
   } catch (error) {
-    console.error("Error creating content:", error);
-    res.status(500).json({ message: "Failed to create content" });
+    console.error("Error creating bulk content:", error);
+    res.status(500).json({ message: "Failed to create contents" });
   }
 };
 
 // Optimized existing functions
 export const createCourse = async (req, res) => {
   try {
-    const { course_name, description, price, thumbnail_url  } = req.body;
+    const { course_name, description, price, thumbnail_url,is_published } = req.body;
     const adminId = req.user.userId;
 
-    const existingCourse = await Course.findOne({ where: { course_name } });
+    const existingCourse = await Course.findOne({
+  where: {
+    course_name,
+    isDeleted: false
+  }
+});
+
     if (existingCourse) {
       return res
         .status(400)
@@ -48,6 +67,8 @@ export const createCourse = async (req, res) => {
       description,
       price,
       thumbnail_url,
+      is_published,
+      status: is_published ? "Published" : "Draft"
     });
     res.status(201).json({ message: "Course created successfully", newCourse });
   } catch (error) {
@@ -86,16 +107,28 @@ export const getCourseById = async (req, res) => {
 
 export const updateCourse = async (req, res) => {
   try {
-    const { id } = req.params;
-    const [updated] = await Course.update(req.body, { where: { id } });
+    const id = req.params.id;
+    const { course_name, description, price, thumbnail_url } = req.body;
 
-    if (!updated) return res.status(404).json({ message: "Course not found" });
-    res.status(200).json({ message: "Course updated successfully" });
-  } catch (error) {
-    console.error("Error updating course:", error);
+    const course = await Course.findByPk(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    await course.update({
+      course_name,
+      description,
+      price,
+      thumbnail_url,
+    });
+
+    res.json({ message: "Course updated successfully", course });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: "Failed to update course" });
   }
 };
+
 
 export const deleteCourse = async (req, res) => {
   try {
@@ -114,19 +147,21 @@ export const deleteCourse = async (req, res) => {
 
 export const courseStatus = async (req, res) => {
   try {
-    const { id } = req.params;
-    const course = await Course.findByPk(id);
+    const courseId = req.params.id;
+    const { status } = req.body;  // expected: "Published" or "Draft"
 
+    const course = await Course.findByPk(courseId);
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // Update course status instead of soft delete
-    await course.update({ status: "Published", updatedAt: new Date() });
+    course.status = status; // update status
+    await course.save();
 
-    res.status(200).json({ message: "Course status updated to published" });
-  } catch (error) {
-    console.error("Error updating course status:", error);
-    res.status(500).json({ message: "Failed to update course status" });
+    res.json({ message: "Status updated successfully", course });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
