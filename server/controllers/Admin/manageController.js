@@ -19,7 +19,7 @@ export const createContent = async (req, res) => {
     }
 
     // Attach courseId to each content item
-    const contentPayload = contents.map(item => ({
+    const contentPayload = contents.map((item) => ({
       courseId,
       title: item.title,
       content: item.content,
@@ -35,7 +35,6 @@ export const createContent = async (req, res) => {
       message: "Contents created successfully",
       contents: createdContents,
     });
-
   } catch (error) {
     console.error("Error creating bulk content:", error);
     res.status(500).json({ message: "Failed to create contents" });
@@ -45,15 +44,16 @@ export const createContent = async (req, res) => {
 // Optimized existing functions
 export const createCourse = async (req, res) => {
   try {
-    const { course_name, description, price, thumbnail_url,is_published } = req.body;
+    const { course_name, description, price, thumbnailUrl, is_published } =
+      req.body;
     const adminId = req.user.userId;
 
     const existingCourse = await Course.findOne({
-  where: {
-    course_name,
-    isDeleted: false
-  }
-});
+      where: {
+        course_name,
+        isDeleted: false,
+      },
+    });
 
     if (existingCourse) {
       return res
@@ -66,9 +66,9 @@ export const createCourse = async (req, res) => {
       course_name,
       description,
       price,
-      thumbnail_url,
+      thumbnailUrl,
       is_published,
-      status: is_published ? "Published" : "Draft"
+      status: is_published ? "Published" : "Draft",
     });
     res.status(201).json({ message: "Course created successfully", newCourse });
   } catch (error) {
@@ -81,7 +81,7 @@ export const getCourses = async (req, res) => {
   try {
     const courses = await Course.findAll({
       where: { isDeleted: false },
-       order: [["id", "ASC"]], 
+      order: [["id", "ASC"]],
     });
     res.status(200).json(courses);
   } catch (error) {
@@ -129,7 +129,6 @@ export const updateCourse = async (req, res) => {
   }
 };
 
-
 export const deleteCourse = async (req, res) => {
   try {
     const { id } = req.params;
@@ -148,7 +147,7 @@ export const deleteCourse = async (req, res) => {
 export const courseStatus = async (req, res) => {
   try {
     const courseId = req.params.id;
-    const { status } = req.body;  // expected: "Published" or "Draft"
+    const { status } = req.body; // expected: "Published" or "Draft"
 
     const course = await Course.findByPk(courseId);
     if (!course) {
@@ -164,4 +163,3 @@ export const courseStatus = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
