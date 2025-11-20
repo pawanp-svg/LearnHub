@@ -12,9 +12,13 @@
   <!-- COURSE DISPLAY SECTION -->
   <!-- ========================= -->
   <section class="course-list-section">
+    @if (userRole==='Admin') {
+    <h2 class="section-header">Courses Dashboard</h2>
+    } @else{
     <h2 class="section-header">
       {{ pageType === 'my-courses' ? 'Your Courses' : 'Popular Courses to Start Learning' }}
     </h2>
+    }
 
     <!-- LOADING STATE -->
     @if (loading()) {

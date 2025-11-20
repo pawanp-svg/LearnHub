@@ -13,6 +13,7 @@ interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  authStateChanged = signal(0);
   private API_URL = 'http://localhost:5000/api/auth';
 
   private _isLoggedIn = signal<boolean>(this.hasToken());
@@ -77,6 +78,7 @@ export class AuthService {
 
     this._isLoggedIn.set(false);
     this._user.set(null);
+    this.authStateChanged.update((v) => v + 1);
 
     this.router.navigate(['/']);
   }

@@ -1,0 +1,99 @@
+.options-card {
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 80px; /* Offset below the sticky navbar */
+}
+.card-image-wrapper {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+.course-thumbnail {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+.video-overlay:hover {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.play-icon {
+  font-size: 60px;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 5px;
+}
+.preview-text {
+  font-size: 1.1rem;
+}
+
+/* Price and CTA Group */
+.price-group {
+  padding: 15px 20px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+.price-tag {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #003459;
+  display: block;
+  margin-bottom: 5px;
+}
+.subscription-text {
+  color: #555;
+  font-size: 0.9rem;
+}
+.cta-buttons {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cta-button {
+  width: 100%;
+  height: 48px;
+  font-weight: 700;
+  border-radius: 4px;
+}
+.primary-cta {
+  background-color: #007ea7; /* Accent Blue */
+  color: #ffffff;
+}
+.primary-cta:hover {
+  background-color: #005980;
+}
+.secondary-cta,
+.enrolled-button {
+  border: 1px solid #005980;
+  color: #005980;
+  background-color: #ffffff;
+}
+.enrolled-button {
+  background-color: #efefef;
+  color: #555;
+}
+.guarantee-text {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #555;
+  padding-bottom: 20px;
+}

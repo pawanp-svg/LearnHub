@@ -1,1 +1,29 @@
-<p>course-detail-page works!</p>
+<app-navbar></app-navbar>
+
+<div class="detail-page-container" *ngIf="course() as c">
+  <div class="content-wrapper">
+    <div class="main-content">
+      <div class="course-header-block">
+        <h1 class="course-title">{{ c.course_name }}</h1>
+        <p class="course-description">{{ c.description }}</p>
+
+        <div class="course-meta">
+          <span class="learners">{{ c.totalEnrollments || 0 | number }} learners</span>
+        </div>
+      </div>
+
+      <app-modules-component
+        [content]="modules()"
+        [isEnrolled]="userStatus() === 'ENROLLED'"
+      ></app-modules-component>
+    </div>
+
+    <div class="sidebar">
+      <app-options-card-component
+        [course]="c"
+        [userStatus]="userStatus()"
+        (enroll)="onEnroll()"
+      ></app-options-card-component>
+    </div>
+  </div>
+</div>

@@ -11,6 +11,7 @@ export interface Course {
   thumbnailUrl?: string;
   status?: string;
   isEnrolled?: boolean;
+  totalEnrollments?: number;
 }
 
 @Injectable({
@@ -23,42 +24,85 @@ export class CourseService {
   public courses = this._courses.asReadonly();
 
   constructor(private http: HttpClient, private auth: AuthService) {
+    // 🔥 React to global login/logout changes
     effect(() => {
-      const loggedIn = this.auth.isLoggedIn();
-      if (!loggedIn) {
-        this._courses.set([]); // clear cached data
-        this.loadPublicCourses(); // reload public courses
-      }
+      const _trigger = this.auth.authStateChanged(); // ensures detection
+      this.handleAuthStateChange();
     });
   }
 
-  loadCourses() {
+  // ==========================================================================
+  // 🔥 MAIN ENTRY: Handle login / logout globally
+  // ==========================================================================
+  private async handleAuthStateChange() {
+    const loggedIn = this.auth.isLoggedIn();
+    const role = this.auth.getUserRole();
+
+    // Clear old data always
+    this._courses.set([]);
+
+    if (!loggedIn) {
+      // Guest / logged-out → load public course list
+      await this.loadPublicCourses();
+    } else {
+      // Logged in → load correct course list by role
+      await this.loadCourses();
+    }
+  }
+
+  // ==========================================================================
+  // 🔥 Load correct courses based on role
+  // ==========================================================================
+  async loadCourses() {
     const isLoggedIn = this.auth.isLoggedIn();
-    const role = this.auth.getUserRole(); // <- FIXED
+    const role = this.auth.getUserRole();
 
     let endpoint = '';
 
     if (!isLoggedIn) {
+      // Guest → public courses
       endpoint = `${this.API}/user/`;
     } else if (role === 'Student') {
+      // Student dashboard
       endpoint = `${this.API}/user/dashboard`;
     } else if (role === 'Admin') {
+      // Admin course list
       endpoint = `${this.API}/admin/courses`;
     }
 
-    // SAFETY FALLBACK
+    // Safety fallback
     if (!endpoint) {
-      console.warn('⚠ No valid endpoint matched. Falling back to public /api/user/ endpoint.');
+      console.warn('⚠ No endpoint matched! Falling back to /user/');
       endpoint = `${this.API}/user/`;
     }
 
-    console.log('Endpoint Selected:', endpoint);
+    console.log('📡 Fetching from:', endpoint);
 
-    return firstValueFrom(
-      this.http.get<Course[]>(endpoint).pipe(tap((courses) => this._courses.set(courses)))
-    );
+    const courses = await firstValueFrom(this.http.get<Course[]>(endpoint));
+    this._courses.set(courses);
+
+    return courses;
   }
 
+  // ==========================================================================
+  // 🔹 Load public (guest) course list
+  // ==========================================================================
+  async loadPublicCourses() {
+    const list = await firstValueFrom(this.http.get<Course[]>(`${this.API}/user/`));
+    this._courses.set(list);
+    return list;
+  }
+
+  // ==========================================================================
+  // 🔹 Refresh (used by HomePage or forced reloads)
+  // ==========================================================================
+  refresh() {
+    return this.loadCourses();
+  }
+
+  // ==========================================================================
+  // CRUD Operations (Admin)
+  // ==========================================================================
   getCourse(id: number) {
     return this.http.get<Course>(`${this.API}/courses/${id}`);
   }
@@ -68,37 +112,29 @@ export class CourseService {
   }
 
   reset() {
-    this._courses.set([]); // clear memory
-    this.loadPublicCourses(); // reload non-logged course list
-  }
-
-  loadPublicCourses() {
-    return firstValueFrom(
-      this.http.get<Course[]>(`${this.API}/user/`).pipe(tap((list) => this._courses.set(list)))
-    );
-  }
-  refresh() {
-    return this.loadCourses();
+    this._courses.set([]);
+    return this.loadPublicCourses();
   }
 
   createCourse(courseData: any) {
-  return this.http.post(`${this.API}/admin/courses`, courseData);
+    return this.http.post(`${this.API}/admin/courses`, courseData);
   }
+
   createMultipleContents(payload: any) {
-  return this.http.post(`${this.API}/admin/courses/content`, payload);
- }
+    return this.http.post(`${this.API}/admin/courses/content`, payload);
+  }
 
   updateStatus(id: number, status: string) {
-  return this.http.put(`${this.API}/admin/courses/status/${id}`, { status });
+    return this.http.put(`${this.API}/admin/courses/status/${id}`, { status });
   }
 
   updateCourse(id: number, data: any) {
-  return this.http.put(`${this.API}/admin/courses/${id}`, data);
+    return this.http.put(`${this.API}/admin/courses/${id}`, data);
   }
 
   getCourseById(id: number) {
-  return this.http.get(`${this.API}/courses/${id}`);
-}
+    return this.http.get(`${this.API}/courses/${id}`);
+  }
 
   deleteCourse(id: number) {
     return this.http.delete(`${this.API}/admin/courses/${id}`);

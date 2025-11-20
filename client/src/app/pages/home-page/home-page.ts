@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CourseCardComponent } from '../../components/shared/course-card-component/course-card-component';
 import { FooterComponent } from '../../components/shared/footer-component/footer-component';
@@ -29,14 +29,7 @@ import { CourseService, Course } from '../../services/course-service';
 export class HomePage {
   pageType: 'home' | 'my-courses' = 'home';
 
-  // Backend-driven data (signal)
-  get courses() {
-    return this.courseService.courses;
-  }
-
-  // Filtered list for template
   filteredCourses = signal<Course[]>([]);
-
   loading = signal(true);
 
   constructor(
@@ -44,20 +37,39 @@ export class HomePage {
     public auth: AuthService,
     private courseService: CourseService
   ) {
-    // When route changes (home → my-courses)
+    // 🔥 Only react AFTER login/logout changes (not page load)
+    effect(() => {
+      const trigger = this.auth.authStateChanged();
+      this.reloadCourses();
+    });
+
+    // 🔥 Handle route change (home → my-courses)
     this.route.data.subscribe((data) => {
       this.pageType = data['pageType'] ?? 'home';
       this.applyFilter();
     });
   }
 
-  async ngOnInit() {
+  // 🔥 One unified course reload logic
+  private async reloadCourses() {
     this.loading.set(true);
 
-    await this.courseService.loadCourses(); // auto-selects endpoint based on role
+    await this.courseService.loadCourses();
     this.applyFilter();
 
     this.loading.set(false);
+  }
+
+  // 🔥 Load on first page load
+  async ngOnInit() {
+    await this.reloadCourses();
+  }
+
+  get userRole() {
+    return this.auth.getUserRole();
+  }
+  get courses() {
+    return this.courseService.courses;
   }
 
   // ------------------------------------------------
@@ -67,16 +79,13 @@ export class HomePage {
     const all = this.courses();
 
     if (this.pageType === 'my-courses') {
-      // Only Student role can have enrolled list
       if (this.auth.getUserRole() === 'Student') {
         this.filteredCourses.set(all.filter((c) => c.isEnrolled));
       } else {
-        // Admin → empty list (no enrolled concept)
-        this.filteredCourses.set([]);
+        this.filteredCourses.set([]); // admin has no "my courses"
       }
     } else {
-      // Home → show all courses
-      this.filteredCourses.set(all);
+      this.filteredCourses.set(all); // home page
     }
   }
 

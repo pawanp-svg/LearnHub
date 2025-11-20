@@ -24,7 +24,7 @@ export const appRoutes: Routes = [
     component: AuthPage,
   },
   {
-    path: 'course',
+    path: 'course/:id',
     component: CourseDetailPage,
     canActivate: [AuthGuard],
   },

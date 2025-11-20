@@ -5,7 +5,10 @@ import {
   getCourseDashboard,
   enrollInCourse,
 } from "../../controllers/User/enrollmentController.js";
-import { getAllCourses } from "../../controllers/User/courseController.js";
+import {
+  getAllCourses,
+  getCourseById,
+} from "../../controllers/User/courseController.js";
 
 const router = express.Router();
 
@@ -18,5 +21,7 @@ router.get("/dashboard", authMiddleware, getCourseDashboard);
 router.post("/:courseId/enroll", authMiddleware, enrollInCourse);
 
 router.get("/", getAllCourses);
+
+router.get("/:courseId", authMiddleware, getCourseById);
 
 export default router;

@@ -17,6 +17,7 @@ export const getCourseDashboard = async (req, res) => {
         "course_name",
         "description",
         "price",
+        "thumbnailUrl",
         // Use Sequelize literal to check for existing enrollment status
         [
           Sequelize.literal(`
