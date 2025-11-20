@@ -28,4 +28,11 @@ export const appRoutes: Routes = [
     component: CourseDetailPage,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'admin/edit-course/:id',
+    loadComponent: () =>
+      import('./pages/Admin/edit-course-page/edit-course-page.component').then(
+        (m) => m.EditCourseComponent
+      ),
+  },
 ];

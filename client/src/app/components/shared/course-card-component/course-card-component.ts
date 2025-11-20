@@ -46,7 +46,8 @@ import { DetailedViewService } from '../../../services/detailed-view-service';
           {{ course.status === 'Draft' ? 'Publish' : 'Unpublish' }}
         </button>
 
-        <button mat-menu-item (click)="openEditCourse()">Edit</button>
+        <button mat-menu-item (click)="editCourse(course.id)">Edit</button>
+
         <button mat-menu-item (click)="deleteCourse(course.id)">Delete</button>
       </mat-menu>
       }
@@ -262,15 +263,7 @@ export class CourseCardComponent {
     });
   }
 
-  openEditCourse() {
-    this.dialog
-      .open(CreateCourseDialogComponent, {
-        width: '700px',
-        data: { mode: 'edit' },
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) this.courseService.loadCourses();
-      });
+  editCourse(id: number) {
+    this.router.navigate(['/admin/edit-course', id]);
   }
 }

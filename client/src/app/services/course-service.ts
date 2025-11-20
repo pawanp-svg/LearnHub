@@ -132,11 +132,27 @@ export class CourseService {
     return this.http.put(`${this.API}/admin/courses/${id}`, data);
   }
 
-  getCourseById(id: number) {
-    return this.http.get(`${this.API}/courses/${id}`);
-  }
-
   deleteCourse(id: number) {
     return this.http.delete(`${this.API}/admin/courses/${id}`);
+  }
+
+  getCourseById(id: number) {
+    return this.http.get<any>(`${this.API}/admin/courses/${id}`);
+  }
+
+  getContentByCourse(courseId: number) {
+    return this.http.get<any[]>(`${this.API}/admin/courses/content/course/${courseId}`);
+  }
+
+  updateContent(id: number, body: any) {
+    return this.http.put(`${this.API}/admin/courses/content/${id}`, body);
+  }
+
+  createContent(body: any) {
+    return this.http.post(`${this.API}/admin/courses/content`, body);
+  }
+
+  deleteContent(id: number) {
+    return this.http.delete(`${this.API}/admin/courses/content/${id}`);
   }
 }

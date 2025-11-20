@@ -1,0 +1,54 @@
+<form [formGroup]="courseForm" class="edit-course-form" (ngSubmit)="save()">
+  <h2>Edit Course</h2>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Course Name</mat-label>
+    <input matInput formControlName="course_name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Price</mat-label>
+    <input matInput type="number" formControlName="price" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full">
+    <mat-label>Thumbnail URL</mat-label>
+    <input matInput formControlName="thumbnailUrl" />
+  </mat-form-field>
+
+  <hr />
+
+  <h3>Course Contents</h3>
+
+  <div formArrayName="contents">
+    <div class="content-box" *ngFor="let c of contents.controls; let i = index" [formGroupName]="i">
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Content</mat-label>
+        <textarea matInput formControlName="content"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Order Index</mat-label>
+        <input matInput type="number" formControlName="order_index" />
+      </mat-form-field>
+
+      <button mat-stroked-button color="warn" (click)="removeContent(i)">Remove</button>
+    </div>
+  </div>
+
+  <button mat-flat-button color="accent" (click)="addContent()" type="button">Add Content</button>
+
+  <br /><br />
+
+  <button mat-flat-button color="primary" type="submit" [disabled]="loading">Save Changes</button>
+</form>
