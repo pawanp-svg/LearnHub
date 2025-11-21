@@ -1,0 +1,66 @@
+.enrollment-dialog-container {
+  max-width: 800px;
+  border-radius: 20px;
+  padding: 0;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* Header */
+.dialog-header {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  padding: 25px 0;
+  color: #003459;
+  background: #ffffff;
+}
+
+/* Scrollable CONTENT ONLY WHEN MANY ROWS EXIST */
+.table-wrapper {
+  max-height: 300px; /* visible size */
+  overflow-y: auto; /* scroll only when needed */
+  border-radius: 12px;
+  margin: 10px 25px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+}
+
+/* Table styles */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-table thead {
+  background-color: #003459;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.student-table th,
+.student-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+/* Close Button */
+.dialog-actions {
+  display: flex;
+  justify-content: center;
+  padding: 25px 0 35px;
+}
+
+.close-btn {
+  background-color: #007ea7;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 10px 40px;
+  border-radius: 25px;
+}
+
+.close-btn:hover {
+  background-color: #005980;
+}

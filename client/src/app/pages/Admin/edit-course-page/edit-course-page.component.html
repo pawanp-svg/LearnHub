@@ -1,54 +1,75 @@
-<form [formGroup]="courseForm" class="edit-course-form" (ngSubmit)="save()">
-  <h2>Edit Course</h2>
+<app-navbar></app-navbar>
+<div>
+  <form [formGroup]="courseForm" class="edit-modal" (ngSubmit)="save()">
+    <h2 class="title">Edit Course</h2>
 
-  <mat-form-field appearance="outline" class="full">
-    <mat-label>Course Name</mat-label>
-    <input matInput formControlName="course_name" />
-  </mat-form-field>
+    <!-- MAIN GRID -->
+    <div class="grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Course Name</mat-label>
+        <input matInput formControlName="course_name" />
+      </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full">
-    <mat-label>Description</mat-label>
-    <textarea matInput formControlName="description"></textarea>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="full">
-    <mat-label>Price</mat-label>
-    <input matInput type="number" formControlName="price" />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="full">
-    <mat-label>Thumbnail URL</mat-label>
-    <input matInput formControlName="thumbnailUrl" />
-  </mat-form-field>
-
-  <hr />
-
-  <h3>Course Contents</h3>
-
-  <div formArrayName="contents">
-    <div class="content-box" *ngFor="let c of contents.controls; let i = index" [formGroupName]="i">
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Title</mat-label>
-        <input matInput formControlName="title" />
+      <mat-form-field appearance="outline">
+        <mat-label>Price</mat-label>
+        <input matInput type="number" formControlName="price" />
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full">
-        <mat-label>Content</mat-label>
-        <textarea matInput formControlName="content"></textarea>
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="3" formControlName="description"></textarea>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full">
-        <mat-label>Order Index</mat-label>
-        <input matInput type="number" formControlName="order_index" />
+        <mat-label>Thumbnail URL</mat-label>
+        <input matInput formControlName="thumbnailUrl" />
       </mat-form-field>
-
-      <button mat-stroked-button color="warn" (click)="removeContent(i)">Remove</button>
     </div>
-  </div>
 
-  <button mat-flat-button color="accent" (click)="addContent()" type="button">Add Content</button>
+    <h3 class="section-header">Course Contents</h3>
 
-  <br /><br />
+    <div formArrayName="contents" class="content-list">
+      <div
+        class="content-card"
+        *ngFor="let c of contents.controls; let i = index"
+        [formGroupName]="i"
+      >
+        <div class="content-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
 
-  <button mat-flat-button color="primary" type="submit" [disabled]="loading">Save Changes</button>
-</form>
+          <mat-form-field appearance="outline">
+            <mat-label>Content URL</mat-label>
+            <input matInput formControlName="content" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="order">
+            <mat-label>Order</mat-label>
+            <input matInput type="number" formControlName="order_index" />
+          </mat-form-field>
+
+          <button
+            mat-icon-button
+            color="warn"
+            type="button"
+            class="remove-btn"
+            (click)="removeContent(i)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button mat-stroked-button class="add-btn" type="button" (click)="addContent()">
+      + Add Content
+    </button>
+
+    <div class="actions">
+      <button mat-button mat-dialog-close type="button" (click)="cancelHandler()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit">Save Changes</button>
+    </div>
+  </form>
+</div>

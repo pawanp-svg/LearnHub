@@ -9,8 +9,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { MatIcon } from '@angular/material/icon';
 import { CourseService } from '../../../services/course-service';
+import { Navbar } from '../../../components/shared/navbar/navbar';
 
 @Component({
   selector: 'app-edit-course',
@@ -22,7 +23,7 @@ import { CourseService } from '../../../services/course-service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-
+    MatIcon,
     // Material
     MatFormFieldModule,
     MatInputModule,
@@ -30,6 +31,7 @@ import { CourseService } from '../../../services/course-service';
     MatSelectModule,
     MatDividerModule,
     MatSnackBarModule,
+    Navbar,
   ],
 })
 export class EditCourseComponent implements OnInit {
@@ -176,5 +178,9 @@ export class EditCourseComponent implements OnInit {
         error: (err) => console.error(err),
         complete: () => (this.loading = false),
       });
+  }
+
+  cancelHandler() {
+    this.router.navigate(['/']);
   }
 }

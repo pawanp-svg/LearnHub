@@ -108,7 +108,7 @@ export const getCourseById = async (req, res) => {
 export const updateCourse = async (req, res) => {
   try {
     const id = req.params.id;
-    const { course_name, description, price, thumbnail_url } = req.body;
+    const { course_name, description, price, thumbnailUrl } = req.body;
 
     const course = await Course.findByPk(id);
     if (!course) {
@@ -119,7 +119,7 @@ export const updateCourse = async (req, res) => {
       course_name,
       description,
       price,
-      thumbnail_url,
+      thumbnailUrl,
     });
 
     res.json({ message: "Course updated successfully", course });

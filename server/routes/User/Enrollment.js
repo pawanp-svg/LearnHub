@@ -1,9 +1,10 @@
 // routes/courseRoutes.js (ESM Syntax)
 import express from "express";
-import { authMiddleware } from "../../middlewares/authMiddleware.js";
+import { authMiddleware, isAdmin } from "../../middlewares/authMiddleware.js";
 import {
   getCourseDashboard,
   enrollInCourse,
+  getListOfEnrollments,
 } from "../../controllers/User/enrollmentController.js";
 import {
   getAllCourses,
@@ -19,6 +20,13 @@ router.get("/dashboard", authMiddleware, getCourseDashboard);
 // 3.2.3. Course Enrollment (POST)
 // Endpoint: /api/courses/:courseId/enroll
 router.post("/:courseId/enroll", authMiddleware, enrollInCourse);
+
+router.get(
+  "/enrollmentlist/:courseId",
+  authMiddleware,
+  isAdmin,
+  getListOfEnrollments
+);
 
 router.get("/", getAllCourses);
 

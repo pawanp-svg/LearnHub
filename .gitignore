@@ -2,9 +2,6 @@
 /.env
 /client/node_modules
 /client/.angular
-#pawan's files
-/server/db/seeders/20251110174403-seed-initial-courses.js
-
 
 
 ######################

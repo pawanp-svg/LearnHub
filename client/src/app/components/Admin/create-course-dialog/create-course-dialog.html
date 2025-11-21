@@ -1,77 +1,85 @@
-<mat-dialog-content>
+<mat-dialog-content class="dialog-content">
+  <h2 class="dialog-title">Create / Edit Course</h2>
 
-  <!-- PARENT FORM GROUP -->
-  <form [formGroup]="courseForm" class="form">
+  <form [formGroup]="courseForm" class="form-container">
+    <!-- COURSE DETAILS -->
+    <div class="section-card">
+      <h3 class="section-title">Course Details</h3>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Course Name</mat-label>
-      <input matInput formControlName="course_name" />
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Course Name</mat-label>
+        <input matInput formControlName="course_name" />
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Description</mat-label>
-      <textarea matInput formControlName="description"></textarea>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="3" formControlName="description"></textarea>
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Price</mat-label>
-      <input matInput type="number" formControlName="price" />
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Price</mat-label>
+        <input matInput type="number" formControlName="price" />
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Thumbnail URL</mat-label>
-      <input matInput formControlName="thumbnail_url" />
-    </mat-form-field>
-
-    <hr />
-
-    <h3>Contents</h3>
-
-    <!-- FORM ARRAY STARTS -->
-    <div formArrayName="contents">
-
-      <div *ngFor="let c of contents.controls; let i = index" [formGroupName]="i" class="content-box">
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Title</mat-label>
-          <input matInput formControlName="title" />
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Content</mat-label>
-          <textarea matInput formControlName="content"></textarea>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Order Index</mat-label>
-          <input matInput type="number" formControlName="order_index" />
-        </mat-form-field>
-
-        <button mat-stroked-button color="warn" (click)="removeContent(i)" *ngIf="contents.length > 1">
-          Remove
-        </button>
-
-        <hr />
-      </div>
-
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Thumbnail URL</mat-label>
+        <input matInput formControlName="thumbnailUrl" />
+      </mat-form-field>
     </div>
 
-    <button mat-raised-button color="accent" (click)="addContent()">
-      + Add Another Content
-    </button>
+    <!-- CONTENT SECTION -->
+    <div class="section-card">
+      <h3 class="section-title">Course Contents</h3>
 
-    <br><br>
+      <div formArrayName="contents">
+        <div
+          *ngFor="let c of contents.controls; let i = index"
+          [formGroupName]="i"
+          class="content-item"
+        >
+          <div class="content-item-header">
+            <span class="content-index">Content #{{ i + 1 }}</span>
 
-    <!-- PUBLISH CHECKBOX AT END -->
-    <mat-checkbox formControlName="is_published">
-      Publish this course
-    </mat-checkbox>
+            <button
+              mat-icon-button
+              color="warn"
+              *ngIf="contents.length > 1"
+              (click)="removeContent(i)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
 
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Content (Video URL / Text)</mat-label>
+            <textarea matInput rows="3" formControlName="content"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Order Index</mat-label>
+            <input matInput type="number" formControlName="order_index" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <button mat-stroked-button color="primary" class="add-content-btn" (click)="addContent()">
+        + Add Content Block
+      </button>
+    </div>
+
+    <!-- PUBLISH -->
+    <div class="publish-row">
+      <mat-checkbox formControlName="is_published">Publish this course</mat-checkbox>
+    </div>
   </form>
-
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button color="primary" (click)="submit()">Create</button>
+<mat-dialog-actions align="end" class="actions-bar">
+  <button mat-button mat-dialog-close class="cancel-btn">Cancel</button>
+  <button mat-raised-button color="primary" class="submit-btn" (click)="submit()">Save</button>
 </mat-dialog-actions>

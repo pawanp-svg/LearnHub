@@ -43,6 +43,11 @@ export class HomePage {
       this.reloadCourses();
     });
 
+    effect(() => {
+      this.courseService.courses();
+      this.applyFilter();
+    });
+
     // 🔥 Handle route change (home → my-courses)
     this.route.data.subscribe((data) => {
       this.pageType = data['pageType'] ?? 'home';

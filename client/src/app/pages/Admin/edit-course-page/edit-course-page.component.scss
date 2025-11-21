@@ -1,18 +1,131 @@
-.edit-course-form {
-  width: 80%;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-}
+.edit-modal {
+  padding: 40px 48px;
+  background: #ffffff;
+  max-width: 1100px;
+  margin: 0 auto;
 
-.full {
-  width: 100%;
-  margin-bottom: 15px;
-}
+  .title {
+    margin: 0 0 32px;
+    text-align: center;
+    font-size: 2rem;
+    color: #003459;
+    font-weight: 800;
+  }
 
-.content-box {
-  padding: 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  /* ------- GRID FOR MAIN FORM ------- */
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    padding: 24px;
+    border-radius: 14px;
+    background: #f5faff;
+    border: 1px solid #d8e4ef;
+
+    .full {
+      grid-column: span 2;
+    }
+
+    mat-form-field {
+      width: 100%;
+    }
+  }
+
+  /* ------- SECTION TITLE ------- */
+  .section-header {
+    margin-top: 40px;
+    margin-bottom: 16px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #003459;
+    padding-left: 6px;
+    border-left: 4px solid #007ea7;
+  }
+
+  /* ------- CONTENT SECTION (CARD) ------- */
+  .content-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .content-card {
+    padding: 20px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #d6e2ef;
+    box-shadow: 0 4px 12px rgba(0, 52, 89, 0.06);
+
+    .content-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 100px 50px;
+      gap: 16px;
+      align-items: center;
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      .order {
+        width: 100%;
+      }
+
+      .remove-btn mat-icon {
+        color: #d32f2f;
+        font-size: 26px;
+        transition: 0.2s;
+      }
+
+      .remove-btn:hover mat-icon {
+        transform: scale(1.2);
+      }
+    }
+  }
+
+  /* ------- ADD CONTENT BUTTON ------- */
+  .add-btn {
+    margin-top: 20px;
+    padding: 10px 22px;
+    border-radius: 30px;
+    border: 2px solid #007ea7;
+    font-weight: 600;
+    color: #007ea7;
+    background: #ffffff;
+    transition: 0.25s;
+
+    &:hover {
+      background: #007ea7;
+      color: #ffffff;
+    }
+  }
+
+  /* ------- ACTION BUTTONS ------- */
+  .actions {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    button {
+      padding: 10px 22px;
+      font-size: 1rem;
+      border-radius: 30px;
+    }
+
+    .mat-button {
+      color: #005980;
+      font-weight: 600;
+    }
+
+    .mat-raised-button {
+      background: #005980 !important;
+      color: white !important;
+      font-weight: 700;
+    }
+
+    .mat-raised-button:hover {
+      background: #003459 !important;
+    }
+  }
 }

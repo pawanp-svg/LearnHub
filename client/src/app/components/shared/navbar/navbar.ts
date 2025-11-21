@@ -54,6 +54,7 @@ export class Navbar {
   }
 
   openCreateCourse() {
+    this.router.navigate(['/']);
     this.dialog
       .open(CreateCourseDialogComponent, {
         width: '700px',

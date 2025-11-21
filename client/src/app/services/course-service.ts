@@ -155,4 +155,8 @@ export class CourseService {
   deleteContent(id: number) {
     return this.http.delete(`${this.API}/admin/courses/content/${id}`);
   }
+
+  getEnrollments(courseId: number) {
+    return this.http.get(`${this.API}/user/enrollmentlist/${courseId}`);
+  }
 }

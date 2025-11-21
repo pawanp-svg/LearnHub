@@ -34,5 +34,6 @@ export const appRoutes: Routes = [
       import('./pages/Admin/edit-course-page/edit-course-page.component').then(
         (m) => m.EditCourseComponent
       ),
+    canActivate: [AuthGuard],
   },
 ];

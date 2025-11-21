@@ -1,5 +1,5 @@
 import db from "../../db/models/index.js";
-const { Course, Enrollment, Sequelize } = db;
+const { Course, Enrollment, User, Sequelize } = db;
 
 export const getCourseDashboard = async (req, res) => {
   // The user ID is attached by authMiddleware
@@ -96,5 +96,50 @@ export const enrollInCourse = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal server error during enrollment." });
+  }
+};
+
+export const getListOfEnrollments = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    if (!courseId) {
+      return res.status(400).json({ message: "Course ID is required" });
+    }
+
+    // Check if course exists
+    const course = await Course.findOne({ where: { id: courseId } });
+
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    // Fetch list of enrolled students
+    const enrollments = await Enrollment.findAll({
+      where: { courseId },
+      include: [
+        {
+          model: User,
+          attributes: ["id", "first_name", "last_name", "email"], // add more fields if needed
+        },
+      ],
+      order: [["enrollment_date", "DESC"]],
+    });
+
+    return res.status(200).json({
+      courseId,
+      total: enrollments.length,
+      students: enrollments.map((enroll) => ({
+        enrollmentId: enroll.id,
+        enrollmentDate: enroll.enrollment_date,
+        status: enroll.status,
+        user: enroll.User,
+      })),
+    });
+  } catch (error) {
+    console.error("Error fetching enrolled students:", error);
+    return res
+      .status(500)
+      .json({ message: "Internal server error during enrollment fetch" });
   }
 };

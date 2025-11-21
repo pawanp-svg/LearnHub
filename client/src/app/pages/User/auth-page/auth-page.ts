@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth';
 import { Router, RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // --- Custom Validator for Password Confirmation ---
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
@@ -38,6 +39,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    RouterLink,
   ],
   templateUrl: './auth-page.html', // Your template stays the same
   styleUrls: ['./auth-page.scss'], // Your styles stay the same
@@ -53,7 +55,12 @@ export class AuthPage {
   loginForm!: FormGroup;
   registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private auth: AuthService,
+    private router: Router,
+    private snack: MatSnackBar
+  ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
@@ -130,6 +137,7 @@ export class AuthPage {
       .subscribe({
         next: () => {
           this.loading.set(false);
+          this.snack.open('Registration successful! Please log in.', 'Close', { duration: 4000 });
           this.viewMode.set('login'); // go to login after successful registration
         },
         error: (err) => {

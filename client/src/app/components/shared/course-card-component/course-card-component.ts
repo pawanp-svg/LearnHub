@@ -13,6 +13,7 @@ import { MatListModule } from '@angular/material/list';
 import { DeleteConfirmDialogComponent } from '../../Admin/delete-confirm-dialog/delete-confirm-dialog';
 import { CreateCourseDialogComponent } from '../../Admin/create-course-dialog/create-course-dialog';
 import { DetailedViewService } from '../../../services/detailed-view-service';
+import { EnrollmentListDialogComponent } from '../../Admin/enrollment-list-dialog-component/enrollment-list-dialog-component';
 
 @Component({
   selector: 'app-course-card',
@@ -71,7 +72,7 @@ import { DetailedViewService } from '../../../services/detailed-view-service';
 
           <!-- ADMIN BUTTON -->
           @if (userRole === 'Admin') {
-          <button mat-flat-button class="details-button">
+          <button mat-flat-button class="details-button" (click)="openEnrollmentList()">
             {{ course.totalEnrollments }} | Enrollments
           </button>
           }
@@ -179,7 +180,7 @@ import { DetailedViewService } from '../../../services/detailed-view-service';
         font-size: 0.95rem;
         color: #555;
         margin-bottom: 10px;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         display: -webkit-box;
         overflow: hidden;
         -webkit-box-orient: vertical;
@@ -258,8 +259,22 @@ export class CourseCardComponent {
       if (!confirmed) return;
 
       this.courseService.deleteCourse(id).subscribe(() => {
-        this.courseService.loadCourses();
+        this.courseService.refresh();
       });
+    });
+  }
+
+  openEnrollmentList() {
+    this.courseService.getEnrollments(this.course.id).subscribe({
+      next: (res: any) => {
+        console.log(res);
+        this.dialog.open(EnrollmentListDialogComponent, {
+          width: '600px',
+          data: res,
+          panelClass: 'custom-dialog-container',
+        });
+      },
+      error: (err) => console.error(err),
     });
   }
 

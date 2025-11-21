@@ -1,0 +1,25 @@
+<div class="error-dialog">
+  <!-- Close button -->
+  <button mat-icon-button class="close-btn" (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <!-- Icon -->
+  <div class="icon-circle">⚠️</div>
+
+  <!-- Title -->
+  <h2 class="title">Oops! We hit a snag</h2>
+
+  <!-- Status -->
+  <p class="status">
+    Error <strong>{{ data.status }}</strong>
+  </p>
+
+  <!-- Message -->
+  <p class="message">{{ data.message }}</p>
+
+  <!-- CTA -->
+  <button mat-raised-button color="primary" class="home-btn" (click)="goHome()">
+    Go to Homepage
+  </button>
+</div>
